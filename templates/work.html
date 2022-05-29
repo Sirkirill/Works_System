@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<body>
+<form method="post" id="fileupload" action="/collect_works_info/" enctype="multipart/form-data" accept-charset="utf-8" class="fill-up">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-lg-4">
+
+            <ul class="padded separate-sections">
+               <li>
+                    <input type="file" name="myfile" id="myfile" />
+
+               </li>
+            </ul>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-blue">Submit</button>
+            </div>
+
+            {% if queryset %}
+                {% for item in queryset %}
+                    {{ item.title }}, {% for contributor in item.contributors.all %}{{ contributor.full_name }}{% endfor %}, {{ item.iswc }} <br>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+</form>
+</body>
+</html>
