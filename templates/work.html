@@ -16,13 +16,28 @@
             <div class="form-actions">
                 <button type="submit" class="btn btn-blue">Submit</button>
             </div>
-
-            {% if queryset %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Contributors</th>
+                        <th scope="col">ISWC</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {% for item in queryset %}
-                    {{ item.title }}, {% for contributor in item.contributors.all %}{{ contributor.full_name }}{% endfor %}, {{ item.iswc }} <br>
+                    <tr>
+                      <td>{{ item.title }}</td>
+                      <td>
+                          {% for contributor in item.contributors.all %}
+                              {{ contributor.full_name }}
+                          {% endfor %}
+                      </td>
+                      <td>@{{ item.iswc }}</td>
+                    </tr>
                 {% endfor %}
-            {% endif %}
-
+              </tbody>
+            </table>
         </div>
     </div>
 </form>
