@@ -20,7 +20,7 @@ from rest_framework.routers import DefaultRouter
 from work.views import WorksView, HomeView, WorksViewSet
 
 router = DefaultRouter()
-router.register(r"books", WorksViewSet, basename="book")
+router.register(r"works", WorksViewSet, basename="work")
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),

@@ -85,8 +85,8 @@ DATABASES = {
         'NAME': 'work_system',
         'USER': config('DATABASE_USER'),
         'PASSWORD': config('DATABASE_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5433',
+        'HOST': config('HOST'),
+        'PORT': config('PORT'),
     }
 }
 
