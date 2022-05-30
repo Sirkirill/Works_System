@@ -55,5 +55,8 @@ python manage.py migrate
 python manage.py runserver
 ```
 ##### For test first task - runserver, at start page upload csv file. Current db will be show below
-
+##### Also you can test first task by django command
+```
+python manage.py collect_work path/to/your/file
+```
 ##### For the second task go to url '/works/some_existed_iswc' where you can se result
