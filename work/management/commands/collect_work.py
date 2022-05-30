@@ -1,29 +1,22 @@
+import argparse
 import csv
 import re
 
-from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse
-from django.views import View
-from rest_framework import viewsets
-from rest_framework.response import Response
+from django.core.management import BaseCommand
 
 from work.models import Work
-from work.serializer import WorkSerializer
+from work.views import has_duplicate_contributors
 
 
-def has_duplicate_contributors(contributors, probable_work):
-    return any(list(contributor.values())[0] in contributors for contributor in list(probable_work))
+class Command(BaseCommand):
+    help = 'Collect work from csv file'
 
+    def add_arguments(self, parser):
+        parser.add_argument('file', nargs='+', type=str)
 
-class HomeView(View):
-    def get(self, request):
-        return render(request, "work.html", context={"queryset": Work.objects.all()})
-
-
-class WorksView(View):
-    def post(self, request):
-        file = request.FILES['myfile']
-        with open(file.name, 'rt') as file:
+    def handle(self, *args, **options):
+        file = options['file'][0]
+        with open(file, 'rt') as file:
             works = csv.reader(file)
             row = 0
             for work in works:
@@ -51,14 +44,3 @@ class WorksView(View):
                         else:  # if wee need to create new work
                             current_work = Work.objects.create()
                             current_work.update_current_work(title, iswc, contributors)
-        return redirect(reverse('home'))
-
-
-class WorksViewSet(viewsets.ViewSet):
-    queryset = Work.objects.prefetch_related('contributors').all()
-    lookup_field = 'iswc'
-
-    def retrieve(self, request, iswc=None):
-        work = get_object_or_404(self.queryset, iswc=iswc)
-        serializer = WorkSerializer(work)
-        return Response(serializer.data)

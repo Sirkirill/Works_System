@@ -54,6 +54,6 @@ python manage.py migrate
 ```
 python manage.py runserver
 ```
-##### For test first task runserver at startpage upload csv file. Current bd will be show below
+##### For test first task - runserver, at start page upload csv file. Current db will be show below
 
 ##### For the second task go to url '/works/some_existed_iswc' where you can se result

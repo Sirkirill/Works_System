@@ -7,7 +7,7 @@ class People(models.Model):
 
 class Work(models.Model):
     title = models.CharField(verbose_name="Title", max_length=255)
-    iswc = models.CharField(verbose_name="Iswc", max_length=255, null=True, blank=True)
+    iswc = models.CharField(verbose_name="Iswc", max_length=255, blank=True, db_index=True)
     contributors = models.ManyToManyField(People, related_name="works", verbose_name="Contributors")
 
     def update_current_work(self, title, iswc, contributors):
