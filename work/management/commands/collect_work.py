@@ -1,11 +1,9 @@
-import argparse
 import csv
 import re
 
 from django.core.management import BaseCommand
 
 from work.models import Work
-from work.views import has_duplicate_contributors
 
 
 class Command(BaseCommand):
@@ -30,17 +28,10 @@ class Command(BaseCommand):
                     if iswc and current_work.exists():  # if work with  current iswc exist
                         current_work.first().update_current_work(title, iswc, contributors)
                     else:
-                        probable_works = Work.objects.filter(title=title)
-                        probable_works_contributors = probable_works.values("contributors__full_name").all()
-                        if probable_works.exists() and has_duplicate_contributors(
-                                contributors,
-                                probable_works_contributors
-                        ):  # if work with same title and at least one same contributor exist
+                        probable_works = Work.objects.filter(title=title, contributors__full_name__in=contributors)
+                        if probable_works.exists():  # if work with same title and at least one same contributor exist
                             for current_work in probable_works.all():
-                                current_work_contributors = current_work.contributors.values("full_name").all()
-                                if has_duplicate_contributors(contributors, current_work_contributors):
-                                    # check if current work has at least one same contributor
-                                    current_work.update_current_work(title, iswc, contributors)
+                                current_work.update_current_work(title, iswc, contributors)
                         else:  # if wee need to create new work
                             current_work = Work.objects.create()
                             current_work.update_current_work(title, iswc, contributors)
